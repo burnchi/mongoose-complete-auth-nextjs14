@@ -2,13 +2,27 @@
 import Link from 'next/link'
 import { toast } from 'react-toastify';
 import { useForm } from "react-hook-form"
-
-const authenticate = (formData: any) => {
+import axios from 'axios';
+const authenticate = async (formData: any) => {
     console.log(formData);
 
     const dataForm = document.getElementById('dataform') as HTMLFormElement
 
-    dataForm.reset()
+    const response = await axios.post('/api/register',formData)
+    const data = await response.data
+    console.log(response);
+    console.log(data);
+    if (data.success) {
+        toast.success(data?.message,{
+          position: "top-center"
+        })
+    }else{
+        toast.error(data?.error,{
+          position: "top-center"
+        })
+    }
+    
+    // dataForm.reset()
     // if ( email === '' || password === '') {
     //   toast.error("电子邮件或密码不能为空！",{
     //     position: "top-center"
