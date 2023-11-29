@@ -6,6 +6,9 @@ import { useForm } from "react-hook-form"
 const authenticate = (formData: any) => {
   console.log(formData);
 
+  const dataForm = document.getElementById('dataform') as HTMLFormElement
+  
+  dataForm.reset()
   // if ( email === '' || password === '') {
   //   toast.error("电子邮件或密码不能为空！",{
   //     position: "top-center"
@@ -24,14 +27,18 @@ export default function Home() {
   const {
     register,
     handleSubmit,
-    formState:{ errors }
-  } = useForm()
-
-  console.log(errors);
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: ""
+    }
+  })
 
   return (
     <div className='w-screen h-screen flex gap-y-5'>
       <form className='min-w-[40vw] min-h-[45vh] m-auto flex flex-col p-10 gap-y-4 ring-2 ring-blue-400'
+      id='dataform'
         onSubmit={handleSubmit(authenticate)}
       >
         <h1 className=' text-center text-xl font-semibold'>登录界面</h1>
@@ -40,7 +47,7 @@ export default function Home() {
           <input className='ring-2 ring-blue-200 p-2 focus:outline-blue-500' type="text" id="email"
             {
             ...register("email", {
-              required: "电子邮件不能为空"
+              required: "电子邮件不能为空!"
             })
             }
             placeholder='111' autoComplete="off" />
@@ -49,7 +56,7 @@ export default function Home() {
           <label htmlFor="password">密码</label>
           <input id="password" className='ring-2 ring-blue-200 p-2 focus:outline-blue-500' type="password"
             {...register("password", {
-              required: "密码不能为空",
+              required: "密码不能为空!",
               minLength: {
                 value: 4,
                 message: "密码至少4位"
@@ -59,6 +66,11 @@ export default function Home() {
         </div>
         <button type='submit' className='p-2 bg-blue-500 text-white'
         >登录</button>
+        <div>
+          <p>{errors.email?.message}</p>
+          <p>{errors.password?.message}</p>
+        </div>
+
         <p className=' text-center my-auto'>
           {`还没有注册？`}
           <Link href='/register' className=' text-blue-400 font-medium text-[1.1em]'>注册</Link>
