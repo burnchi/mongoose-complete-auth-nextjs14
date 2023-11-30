@@ -30,16 +30,17 @@ export default function Home() {
   // 请求用户数据
   const onFetchUser = async () => {
     try {
-      
       const response = await axios.get('/api/profile')
       const data = await response.data
-      
       setuser(data.user)
-    } catch (error) {
-      toast.error(error as string)
+    } catch (error:any) {
+      toast.error(error?.response?.data?.error, {
+        position: "top-center",
+      })
       router.push('/login')
     }
   }
+
   useEffect(() => {
     onFetchUser()
   }, [])

@@ -10,23 +10,23 @@ export const POST = async (request: NextRequest) => {
     try {
         // 得到POST请求体内容 await别忘了
         const { email, password } = await request.json()
-
+        
         // 数据库查找用户
         const existUser = await userModel.findOne({ email })
         // 没有用户则返回
         if (!existUser) {
             return NextResponse.json({
-                message: "电子邮件或密码错误!",
+                error: "电子邮件或密码错误!",
                 success: false,
-            })
+            },{status:401})
         }
         // 有用户，则比较数据库密码
         const isMatch = await bcrypt.compare(password, existUser.password)
         if (!isMatch) {
             return NextResponse.json({
-                message: "电子邮件或密码错误!",
+                error: "电子邮件或密码错误!",
                 success: false,
-            })
+            },{status:401})
         }
         //1天过期
         const token = jwt.sign({ userId: existUser._id }, process.env.JWT_SECRET as string, {

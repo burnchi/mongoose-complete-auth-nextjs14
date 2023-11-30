@@ -17,7 +17,7 @@ export const POST = async (request: NextRequest) => {
             return NextResponse.json({
                 error: "用户已存在!",
                 success: false,
-            })
+            },{status:401})
         }
         const salt = await bcrypt.genSalt(10)
         const hashPassword = await bcrypt.hash(password, salt)

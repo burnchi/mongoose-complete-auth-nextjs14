@@ -24,21 +24,23 @@ export default function Home() {
         // console.log(formData);
         const dataForm = document.getElementById('dataform') as HTMLFormElement
 
-        const response = await axios.post('/api/register', formData)
-        const data = await response.data
-        // console.log(response);
-        // console.log(data);
-        if (data.success) {
+        try {
+            const response = await axios.post('/api/register', formData)
+            const data = await response.data
             toast.success(data?.message, {
                 position: "top-center"
             })
             router.push('/login')
-        } else {
-            toast.error(data?.error, {
+        } catch (error:any) {
+            toast.error(error?.response?.data?.error, {
                 position: "top-center"
             })
             dataForm.reset()
         }
+        // console.log(response);
+        // console.log(data);
+            
+            
     }
 
     return (
@@ -63,7 +65,11 @@ export default function Home() {
                     <input className='ring-2 ring-blue-200 p-2 focus:outline-blue-500' type="text" id="email"
                         {
                         ...register("email", {
-                            required: "电子邮件不能为空!"
+                            required: "电子邮件不能为空!",
+                            pattern: {
+                                value: /([\w\.\-_]+)?\w+@[\w-_]+(\.\w+){1,}/igm,
+                                message: '电子邮件格式错误！'
+                            },
                         })
                         }
                         placeholder='111' autoComplete="off" />

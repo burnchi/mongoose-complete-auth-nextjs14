@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-// 处理浏览器传来的POST请求
+// 只需清除token
 export const GET = async (request: NextRequest) => {
     try {
         // 设置cookie
