@@ -2,27 +2,12 @@
 import Link from 'next/link'
 import { toast } from 'react-toastify';
 import { useForm } from "react-hook-form"
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
-const authenticate = (formData: any) => {
-  console.log(formData);
-
-  const dataForm = document.getElementById('dataform') as HTMLFormElement
-  
-  dataForm.reset()
-  // if ( email === '' || password === '') {
-  //   toast.error("电子邮件或密码不能为空！",{
-  //     position: "top-center"
-  //   })
-  // }else if (password.length <= 4) {
-  //   toast.error("密码至少要5位",{
-  //     position: "top-center"
-  //   })
-  // }
-  // console.log({email,password});
-
-}
 
 export default function Home() {
+  const router = useRouter()
   //submit才执行
   const {
     register,
@@ -34,6 +19,25 @@ export default function Home() {
       password: ""
     }
   })
+
+  const authenticate = async (formData: any) => {
+    const dataForm = document.getElementById('dataform') as HTMLFormElement
+    const response = await axios.post('/api/login', formData)
+    const data = await response.data
+    // console.log(response);
+    // console.log(data);
+    if (data.success) {
+        toast.success(data?.message, {
+            position: "top-center"
+        })
+        router.push('/')
+    } else {
+        toast.error(data?.message, {
+            position: "top-center"
+        })
+        dataForm.reset()
+    }
+}
 
   return (
     <div className='w-screen h-screen flex gap-y-5'>
